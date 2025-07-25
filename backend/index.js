@@ -12,6 +12,10 @@ const mentorRoutes=require("./routes/mentorRoutes.js");
 const bookingRoutes = require('./routes/bookingRoutes');
 const upskillingRoutes = require('./routes/upskillingRoutes');
 const curatedRoutes = require('./routes/curatedRoutes');
+const lostFoundRoutes = require('./routes/lostFoundRoutes');
+const pollRoutes = require('./routes/pollRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -32,4 +36,8 @@ app.use("/api/mentor",mentorRoutes);
 app.use('/api/book', bookingRoutes);
 app.use("/api/upskilling", upskillingRoutes);
 app.use("/api/resources", curatedRoutes);
+app.use('/api/lostfound', lostFoundRoutes);
+app.use('/api/polls', pollRoutes);
+app.use('/api/feedback', feedbackRoutes);
+
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
