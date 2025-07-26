@@ -23,7 +23,7 @@ function Booking() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:3000/api/book/', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/book/', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Accept': 'application/json'
@@ -56,7 +56,7 @@ function Booking() {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:3000/api/book/', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/book/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ function Booking() {
   const handleCancelBooking = async (bookingId) => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
       try {
-        const response = await fetch(`http://localhost:3000/api/book/${bookingId}`, {
+        const response = await fetch(`https://zerodayhackathon.onrender.com/api/book/${bookingId}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`

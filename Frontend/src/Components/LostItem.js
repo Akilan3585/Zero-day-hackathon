@@ -18,7 +18,7 @@ function LostItem() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:3000/api/items/search?q=${searchTerm}&filter=${filter}`, {
+      const response = await fetch(`https://zerodayhackathon.onrender.com/api/items/search?q=${searchTerm}&filter=${filter}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Accept': 'application/json'

@@ -53,7 +53,7 @@ function Announcement() {
     if (role !== 'admin') return;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/announcement/announcements/${announcements[idx]._id}`, {
+      const response = await fetch(`https://zerodayhackathon.onrender.com/api/announcement/announcements/${announcements[idx]._id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`

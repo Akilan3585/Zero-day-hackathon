@@ -16,7 +16,7 @@ function Home() {
   const fetchRecentAnnouncements = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3000/api/announcement/announcements', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/announcement/announcements', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Accept': 'application/json'

@@ -26,7 +26,7 @@ function Feedback() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:3000/api/feedback/event/${eventId}`, {
+      const response = await fetch(`https://zerodayhackathon.onrender.com/api/feedback/event/${eventId}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Accept': 'application/json'
@@ -59,7 +59,7 @@ function Feedback() {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:3000/api/feedback/submit', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/feedback/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

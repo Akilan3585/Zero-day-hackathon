@@ -28,7 +28,7 @@ function SkillExchange() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:3000/api/upskilling/open', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/upskilling/open', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Accept': 'application/json'
@@ -61,7 +61,7 @@ function SkillExchange() {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:3000/api/upskilling/create', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/upskilling/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ function SkillExchange() {
 
   const handleBookSession = async (sessionId) => {
     try {
-      const response = await fetch('http://localhost:3000/api/upskilling/book', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/upskilling/book', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

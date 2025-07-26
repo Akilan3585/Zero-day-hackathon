@@ -24,7 +24,7 @@ function Mentor() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:3000/api/mentor/getall', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/mentor/getall', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Accept': 'application/json'
@@ -57,7 +57,7 @@ function Mentor() {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:3000/api/mentor/create', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/mentor/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ function Mentor() {
   const handleDeleteMentor = async (mentorId) => {
     if (window.confirm('Are you sure you want to delete this mentor?')) {
       try {
-        const response = await fetch(`http://localhost:3000/api/mentor/${mentorId}`, {
+        const response = await fetch(`https://zerodayhackathon.onrender.com/api/mentor/${mentorId}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`

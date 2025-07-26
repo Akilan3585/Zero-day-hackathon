@@ -43,7 +43,7 @@ function TimeTable() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:3000/api/timetable/timetable/${user?.uid || 'default'}`, {
+      const response = await fetch(`https://zerodayhackathon.onrender.com/api/timetable/timetable/${user?.uid || 'default'}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Accept': 'application/json'
@@ -84,7 +84,7 @@ function TimeTable() {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:3000/api/timetable/timetable', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/timetable/timetable', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ function TimeTable() {
     if (role !== 'admin') return;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/timetable/timetable/${classes[index]._id}`, {
+      const response = await fetch(`https://zerodayhackathon.onrender.com/api/timetable/timetable/${classes[index]._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ function TimeTable() {
 
     if (window.confirm('Are you sure you want to delete this class?')) {
       try {
-        const response = await fetch(`http://localhost:3000/api/timetable/timetable/${classes[index]._id}`, {
+        const response = await fetch(`https://zerodayhackathon.onrender.com/api/timetable/timetable/${classes[index]._id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`

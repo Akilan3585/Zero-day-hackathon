@@ -10,7 +10,7 @@ function Compliants() {
     const fetchComplaints = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:3000/api/complaints');
+        const response = await fetch('https://zerodayhackathon.onrender.com/api/complaints');
         const data = await response.json();
         if (response.ok) {
           setComplaints(data);
@@ -49,7 +49,7 @@ function Compliants() {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3000/api/complaints', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/complaints', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
@@ -82,7 +82,7 @@ function Compliants() {
   // Delete complaint
   const handleDeleteComplaint = id => {
     setLoading(true);
-    fetch(`http://localhost:3000/api/complaints/${id}`, {
+    fetch(`https://zerodayhackathon.onrender.com/api/complaints/${id}`, {
       method: 'DELETE'
     })
       .then(res => {

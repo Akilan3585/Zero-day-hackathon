@@ -33,7 +33,7 @@ function PollAndFeedback() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:3000/api/polls/', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/polls/', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Accept': 'application/json'
@@ -80,7 +80,7 @@ function PollAndFeedback() {
         status: 'active'
       };
 
-      const response = await fetch('http://localhost:3000/api/polls/create', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/polls/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ function PollAndFeedback() {
     if (userVotes[pollId]) return;
 
     try {
-      const response = await fetch('http://localhost:3000/api/polls/vote', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/polls/vote', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ function PollAndFeedback() {
     if (role !== 'admin') return;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/polls/${polls[index]._id}`, {
+      const response = await fetch(`https://zerodayhackathon.onrender.com/api/polls/${polls[index]._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -199,7 +199,7 @@ function PollAndFeedback() {
 
     if (window.confirm('Are you sure you want to delete this poll?')) {
       try {
-        const response = await fetch(`http://localhost:3000/api/polls/${polls[index]._id}`, {
+        const response = await fetch(`https://zerodayhackathon.onrender.com/api/polls/${polls[index]._id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`

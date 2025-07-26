@@ -46,7 +46,7 @@ function Placements() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('http://localhost:3000/api/resources/all', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/resources/all', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Accept': 'application/json'
@@ -99,7 +99,7 @@ function Placements() {
     if (role !== 'admin') return;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/resources/${opportunities[index]._id}`, {
+      const response = await fetch(`https://zerodayhackathon.onrender.com/api/resources/${opportunities[index]._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ function Placements() {
 
     if (window.confirm('Are you sure you want to delete this opportunity?')) {
       try {
-        const response = await fetch(`http://localhost:3000/api/resources/${opportunities[index]._id}`, {
+        const response = await fetch(`https://zerodayhackathon.onrender.com/api/resources/${opportunities[index]._id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -160,7 +160,7 @@ function Placements() {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:3000/api/resources/add', {
+      const response = await fetch('https://zerodayhackathon.onrender.com/api/resources/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
