@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const itemController = require('../controllers/itemController');
-const multer = require('multer');
+
 
 // Configure image uploads
 const storage = multer.diskStorage({
