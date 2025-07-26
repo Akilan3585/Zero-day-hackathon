@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-function Home() {
+function Announcement() {
   const [activeTab, setActiveTab] = useState('announcements');
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -126,6 +126,16 @@ function Home() {
         throw new Error('No authentication token found');
       }
 
+      // Log the data being sent for debugging
+      const announcementData = {
+        ...newAnnouncement,
+        date: new Date().toISOString().split('T')[0],
+        userRole: role,
+        author: role === 'admin' ? 'Admin' : user?.displayName || 'User'
+      };
+      
+      console.log('Sending announcement data:', announcementData);
+
       const response = await fetch('http://localhost:3000/api/announcement/announcements', {
         method: 'POST',
         headers: {
@@ -133,18 +143,19 @@ function Home() {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/json'
         },
-        body: JSON.stringify({
-          ...newAnnouncement,
-          date: new Date().toISOString().split('T')[0]
-        })
+        body: JSON.stringify(announcementData)
       });
+
+      console.log('Response status:', response.status);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.message || `Failed to create: ${response.status}`);
+        console.error('Error response:', errorData);
+        throw new Error(errorData?.message || errorData?.error || `Failed to create: ${response.status}`);
       }
 
       const data = await response.json();
+      console.log('Success response:', data);
       
       setAnnouncements(prevAnnouncements => [data, ...prevAnnouncements]);
       setNewAnnouncement({
@@ -441,4 +452,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Announcement;
