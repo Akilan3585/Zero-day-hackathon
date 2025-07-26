@@ -1,0 +1,15 @@
+src/
+  components/
+    Layout/
+      Header.js
+      TabNav.js
+    Announcements/
+      AnnouncementForm.js
+      AnnouncementList.js
+    Complaints/
+      ComplaintForm.js
+      ComplaintList.js
+    TimeTable/
+      TimeTable.js
+    LostFound/
+      LostFound.js
