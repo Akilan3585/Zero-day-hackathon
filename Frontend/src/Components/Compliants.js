@@ -10,7 +10,7 @@ function Compliants() {
     const fetchComplaints = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/complaints');
+        const response = await fetch('http://localhost:3000/api/complaints');
         const data = await response.json();
         if (response.ok) {
           setComplaints(data);
@@ -49,7 +49,7 @@ function Compliants() {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:5000/api/complaints', {
+      const response = await fetch('http://localhost:3000/api/complaints', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
@@ -82,7 +82,7 @@ function Compliants() {
   // Delete complaint
   const handleDeleteComplaint = id => {
     setLoading(true);
-    fetch(`http://localhost:5000/api/complaints/${id}`, {
+    fetch(`http://localhost:3000/api/complaints/${id}`, {
       method: 'DELETE'
     })
       .then(res => {
@@ -150,7 +150,8 @@ function Compliants() {
         </div>
 
         {/* Complaints Section */}
-        <div>
+        {activeTab === 'complaints' && (
+          <div>
             {/* Error Message */}
             {error && (
               <div style={{ 
@@ -232,6 +233,7 @@ function Compliants() {
               </div>
             ))}
           </div>
+        )}
       </div>
     </div>
   );

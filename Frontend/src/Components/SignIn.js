@@ -1,14 +1,30 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 
 function SignIn() {
   const [activeTab, setActiveTab] = useState('login');
   const navigate = useNavigate();
+  const [form, setForm] = useState({ email: '', password: '', role: 'student' });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate successful login
-    navigate('/home');
+    setError('');
+    setSuccess('');
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, form.email, form.password);
+      localStorage.setItem('userRole', form.role);
+      setSuccess('Sign in successful! Redirecting...');
+      setTimeout(() => navigate('/home'), 1200);
+    } catch (err) {
+      setError(err.message);
+    }
+    setLoading(false);
   };
 
   return (
@@ -71,6 +87,19 @@ function SignIn() {
               Sign Up
             </button>
           </div>
+          {/* Role Select */}
+          <div style={{ width: '100%', marginBottom: 18 }}>
+            <label htmlFor="role" style={{ display: 'block', fontWeight: 500, marginBottom: 6, fontSize: 16 }}>Role</label>
+            <select
+              id="role"
+              value={form.role}
+              onChange={e => setForm({ ...form, role: e.target.value })}
+              style={{ width: '100%', fontSize: 18, padding: '12px 10px', borderRadius: 8, border: '1.5px solid #e5e5e5', background: '#fafafd' }}
+            >
+              <option value="student">Student</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
           {/* Login Form */}
           {activeTab === 'login' && (
             <form style={{ width: '100%' }} onSubmit={handleSubmit}>
@@ -83,6 +112,9 @@ function SignIn() {
                     type="email"
                     placeholder="student@college.edu"
                     style={{ border: 'none', outline: 'none', background: 'transparent', fontSize: 18, padding: '14px 0', width: '100%' }}
+                    value={form.email}
+                    onChange={e => setForm({ ...form, email: e.target.value })}
+                    required
                   />
                 </div>
               </div>
@@ -95,14 +127,19 @@ function SignIn() {
                     type="password"
                     placeholder=""
                     style={{ border: 'none', outline: 'none', background: 'transparent', fontSize: 18, padding: '14px 0', width: '100%' }}
+                    value={form.password}
+                    onChange={e => setForm({ ...form, password: e.target.value })}
+                    required
                   />
                 </div>
               </div>
-              <button type="submit" style={{ width: '100%', background: '#a259ff', color: 'white', border: 'none', borderRadius: 10, padding: '16px 0', fontWeight: 600, fontSize: 20, cursor: 'pointer', marginTop: 8 }}>
-                Sign In
+              <button type="submit" style={{ width: '100%', background: '#a259ff', color: 'white', border: 'none', borderRadius: 10, padding: '16px 0', fontWeight: 600, fontSize: 20, cursor: 'pointer', marginTop: 8 }} disabled={loading}>
+                {loading ? 'Signing In...' : 'Sign In'}
               </button>
             </form>
           )}
+          {error && <div style={{ color: 'red', marginTop: 16, fontWeight: 500 }}>{error}</div>}
+          {success && <div style={{ color: 'green', marginTop: 16, fontWeight: 500 }}>{success}</div>}
         </div>
       </main>
       <div style={{ marginTop: 32, color: '#63636b', fontSize: 16, textAlign: 'center' }}>

@@ -1,14 +1,64 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
 
 function SignUp() {
-  const [form, setForm] = useState({ email: '', password: '', confirmPassword: '' });
+  const [form, setForm] = useState({ email: '', password: '', confirmPassword: '', role: 'student', name: '', rollNumber: '', department: '' });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleSubmit = (e) => {
+  const validate = () => {
+    const newErrors = {};
+    if (!form.name) {
+      newErrors.name = 'Name is required.';
+    }
+    if (!form.email) {
+      newErrors.email = 'Email is required.';
+    } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) {
+      newErrors.email = 'Enter a valid email address.';
+    }
+    if (!form.password) {
+      newErrors.password = 'Password is required.';
+    } else if (form.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters.';
+    }
+    if (!form.confirmPassword) {
+      newErrors.confirmPassword = 'Please confirm your password.';
+    } else if (form.password !== form.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match.';
+    }
+    if (form.role === 'student' && !form.rollNumber) {
+      newErrors.rollNumber = 'Roll number is required.';
+    }
+    if (form.role === 'admin' && !form.department) {
+      newErrors.department = 'Department is required.';
+    }
+    return newErrors;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate successful signup
-    navigate('/home');
+    setError('');
+    setSuccess('');
+    const fieldErrors = validate();
+    setErrors(fieldErrors);
+    if (Object.keys(fieldErrors).length > 0) return;
+    setLoading(true);
+    try {
+      await createUserWithEmailAndPassword(auth, form.email, form.password);
+      localStorage.setItem('userRole', form.role);
+      setSuccess('Sign up successful! Redirecting...');
+      setTimeout(() => navigate('/home'), 1200);
+    } catch (err) {
+      setError(err.message);
+    }
+    setLoading(false);
   };
 
   return (
@@ -74,21 +124,84 @@ function SignUp() {
               Sign Up
             </button>
           </div>
+          {/* Role Select */}
+          <div style={{ width: '100%', marginBottom: 18 }}>
+            <label htmlFor="role" style={{ display: 'block', fontWeight: 500, marginBottom: 6, fontSize: 16 }}>Role</label>
+            <select
+              id="role"
+              name="role"
+              value={form.role}
+              onChange={e => setForm({ ...form, role: e.target.value })}
+              style={{ width: '100%', fontSize: 18, padding: '12px 10px', borderRadius: 8, border: '1.5px solid #e5e5e5', background: '#fafafd' }}
+            >
+              <option value="student">Student</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
           {/* Sign Up Form */}
           <form style={{ width: '100%' }} onSubmit={handleSubmit}>
+            <div style={{ marginBottom: 18 }}>
+              <label htmlFor="name" style={{ display: 'block', fontWeight: 500, marginBottom: 6, fontSize: 16 }}>Name</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="John Doe"
+                style={{ border: 'none', outline: 'none', background: '#fafafd', fontSize: 18, padding: '14px 0', width: '100%', borderRadius: 8, border: '1.5px solid #e5e5e5' }}
+                value={form.name}
+                onChange={e => setForm({ ...form, name: e.target.value })}
+                required
+              />
+              {errors.name && <div style={{ color: 'red', fontSize: 15, marginTop: 4 }}>{errors.name}</div>}
+            </div>
+            {form.role === 'student' && (
+              <div style={{ marginBottom: 18 }}>
+                <label htmlFor="rollNumber" style={{ display: 'block', fontWeight: 500, marginBottom: 6, fontSize: 16 }}>Roll Number</label>
+                <input
+                  id="rollNumber"
+                  name="rollNumber"
+                  type="text"
+                  placeholder="123456"
+                  style={{ border: 'none', outline: 'none', background: '#fafafd', fontSize: 18, padding: '14px 0', width: '100%', borderRadius: 8, border: '1.5px solid #e5e5e5' }}
+                  value={form.rollNumber}
+                  onChange={e => setForm({ ...form, rollNumber: e.target.value })}
+                  required
+                />
+                {errors.rollNumber && <div style={{ color: 'red', fontSize: 15, marginTop: 4 }}>{errors.rollNumber}</div>}
+              </div>
+            )}
+            {form.role === 'admin' && (
+              <div style={{ marginBottom: 18 }}>
+                <label htmlFor="department" style={{ display: 'block', fontWeight: 500, marginBottom: 6, fontSize: 16 }}>Department</label>
+                <input
+                  id="department"
+                  name="department"
+                  type="text"
+                  placeholder="Computer Science"
+                  style={{ border: 'none', outline: 'none', background: '#fafafd', fontSize: 18, padding: '14px 0', width: '100%', borderRadius: 8, border: '1.5px solid #e5e5e5' }}
+                  value={form.department}
+                  onChange={e => setForm({ ...form, department: e.target.value })}
+                  required
+                />
+                {errors.department && <div style={{ color: 'red', fontSize: 15, marginTop: 4 }}>{errors.department}</div>}
+              </div>
+            )}
             <div style={{ marginBottom: 18 }}>
               <label htmlFor="email" style={{ display: 'block', fontWeight: 500, marginBottom: 6, fontSize: 16 }}>Email</label>
               <div style={{ display: 'flex', alignItems: 'center', background: '#fafafd', border: '1.5px solid #e5e5e5', borderRadius: 8, padding: '0 12px' }}>
                 <svg width="22" height="22" fill="none" viewBox="0 0 24 24" style={{ marginRight: 6 }}><rect x="3" y="5" width="18" height="14" rx="3" stroke="#63636b" strokeWidth="1.5"/><path d="M3.5 6.5L12 13L20.5 6.5" stroke="#63636b" strokeWidth="1.5"/></svg>
                 <input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="student@college.edu"
                   style={{ border: 'none', outline: 'none', background: 'transparent', fontSize: 18, padding: '14px 0', width: '100%' }}
                   value={form.email}
                   onChange={e => setForm({ ...form, email: e.target.value })}
+                  required
                 />
               </div>
+              {errors.email && <div style={{ color: 'red', fontSize: 15, marginTop: 4 }}>{errors.email}</div>}
             </div>
             <div style={{ marginBottom: 18 }}>
               <label htmlFor="password" style={{ display: 'block', fontWeight: 500, marginBottom: 6, fontSize: 16 }}>Password</label>
@@ -96,13 +209,19 @@ function SignUp() {
                 <svg width="22" height="22" fill="none" viewBox="0 0 24 24" style={{ marginRight: 6 }}><rect x="5" y="10" width="14" height="8" rx="3" stroke="#63636b" strokeWidth="1.5"/><path d="M12 14V16" stroke="#63636b" strokeWidth="1.5"/><circle cx="12" cy="13" r="1" fill="#63636b"/></svg>
                 <input
                   id="password"
-                  type="password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
                   placeholder=""
                   style={{ border: 'none', outline: 'none', background: 'transparent', fontSize: 18, padding: '14px 0', width: '100%' }}
                   value={form.password}
                   onChange={e => setForm({ ...form, password: e.target.value })}
+                  required
                 />
+                <button type="button" onClick={() => setShowPassword(v => !v)} style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: 6 }}>
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
               </div>
+              {errors.password && <div style={{ color: 'red', fontSize: 15, marginTop: 4 }}>{errors.password}</div>}
             </div>
             <div style={{ marginBottom: 24 }}>
               <label htmlFor="confirmPassword" style={{ display: 'block', fontWeight: 500, marginBottom: 6, fontSize: 16 }}>Confirm Password</label>
@@ -110,18 +229,26 @@ function SignUp() {
                 <svg width="22" height="22" fill="none" viewBox="0 0 24 24" style={{ marginRight: 6 }}><rect x="5" y="10" width="14" height="8" rx="3" stroke="#63636b" strokeWidth="1.5"/><path d="M12 14V16" stroke="#63636b" strokeWidth="1.5"/><circle cx="12" cy="13" r="1" fill="#63636b"/></svg>
                 <input
                   id="confirmPassword"
-                  type="password"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? 'text' : 'password'}
                   placeholder=""
                   style={{ border: 'none', outline: 'none', background: 'transparent', fontSize: 18, padding: '14px 0', width: '100%' }}
                   value={form.confirmPassword}
                   onChange={e => setForm({ ...form, confirmPassword: e.target.value })}
+                  required
                 />
+                <button type="button" onClick={() => setShowConfirmPassword(v => !v)} style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: 6 }}>
+                  {showConfirmPassword ? 'Hide' : 'Show'}
+                </button>
               </div>
+              {errors.confirmPassword && <div style={{ color: 'red', fontSize: 15, marginTop: 4 }}>{errors.confirmPassword}</div>}
             </div>
-            <button type="submit" style={{ width: '100%', background: '#a259ff', color: 'white', border: 'none', borderRadius: 10, padding: '16px 0', fontWeight: 600, fontSize: 20, cursor: 'pointer', marginTop: 8 }}>
-              Sign Up
+            <button type="submit" style={{ width: '100%', background: '#a259ff', color: 'white', border: 'none', borderRadius: 10, padding: '16px 0', fontWeight: 600, fontSize: 20, cursor: 'pointer', marginTop: 8 }} disabled={loading}>
+              {loading ? 'Signing Up...' : 'Sign Up'}
             </button>
           </form>
+          {error && <div style={{ color: 'red', marginTop: 16, fontWeight: 500 }}>{error}</div>}
+          {success && <div style={{ color: 'green', marginTop: 16, fontWeight: 500 }}>{success}</div>}
         </div>
       </main>
       <div style={{ marginTop: 32, color: '#63636b', fontSize: 16, textAlign: 'center' }}>
