@@ -45,7 +45,7 @@ function LostItem() {
 
   const handleMarkResolved = async (itemId) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/items/resolve/${itemId}`, {
+      const response = await fetch(`https://zerodayhackathon.onrender.com/api/items/resolve/${itemId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
